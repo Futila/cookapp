@@ -1,15 +1,19 @@
-import { useState } from "react"
-import {Text, View, ScrollView} from "react-native"
+import { useEffect, useState } from "react"
+import {Text, View, ScrollView, Alert} from "react-native"
 
 
 
 import { s } from "./styles"
 import { Ingridient } from "@/components/ingridient"
 import { SelectedIngredients } from "@/components/selected-ingredients"
+import { services } from "@/services"
+import { Loading } from "@/components/Loading"
 
 
 export default function Index() {
   const [selectedIngridients, setSelectedIngridients] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [ingredients, setIngredients] = useState<IngredientResponse[]>([])
 
 
   function handleToggleSelectedIngridient(value: string) {
@@ -18,6 +22,28 @@ export default function Index() {
     }
 
     setSelectedIngridients((prevState) => [...prevState, value] )
+  }
+
+  function handleClearSelectedingredients() {
+    Alert.alert("Limpar", "Deseja limpar tudo", [
+      { text: "Não", style: "cancel"}, 
+      { text: "Sim", onPress: () => setSelectedIngridients([])}
+    ])
+  }
+
+  useEffect(() => {
+    services.ingredients
+    .findAll()
+    .then(data => {
+      console.log(data)
+      setIngredients(data)
+    })
+    .finally(() => setIsLoading(false) )
+  }, [])
+
+
+  if (isLoading) {
+    return <Loading/>
   }
 
   return (
@@ -34,19 +60,23 @@ export default function Index() {
       contentContainerStyle={s.ingridientsList}
       showsVerticalScrollIndicator={false}
     >
-      {Array.from({length: 30}).map((item, idx) => (
+      {ingredients.map((item) => (
           <Ingridient
-            key={idx}
-            image=""
-            name="Maça"
-            selected={selectedIngridients.includes(String(idx))}
-            onPress={() => handleToggleSelectedIngridient(String(idx))}
+            key={item.id}
+            image={`${services.storage.imagePath}/${item.image}`}
+            name={item.name}
+            selected={selectedIngridients.includes(item.id)}
+            onPress={() => handleToggleSelectedIngridient(item.id)}
           />
       ))}
     </ScrollView> 
 
     {selectedIngridients.length > 0 && (
-      <SelectedIngredients/>
+      <SelectedIngredients
+        onClear={handleClearSelectedingredients}
+        onSearch={() => {}}
+        quantity={selectedIngridients.length}
+      />
     )}
 
     </View>
