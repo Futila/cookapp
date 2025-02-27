@@ -4,7 +4,7 @@ import { Image, Pressable, PressableProps, Text } from "react-native";
 import { s } from "./styles";
 
 
-type IngridientProps = PressableProps & {
+export type IngridientProps = PressableProps & {
   image: string
   name: string
   selected?: boolean

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import {Text, View, ScrollView, Alert} from "react-native"
+import { router } from "expo-router"
 
 
 
@@ -31,11 +32,16 @@ export default function Index() {
     ])
   }
 
+  function handleSearch() {
+    const queryParams = selectedIngridients.join(",")
+    router.navigate(`/recipes/${queryParams}`)
+  }
+
   useEffect(() => {
     services.ingredients
     .findAll()
     .then(data => {
-      console.log(data)
+      // console.log(data)
       setIngredients(data)
     })
     .finally(() => setIsLoading(false) )
@@ -74,7 +80,7 @@ export default function Index() {
     {selectedIngridients.length > 0 && (
       <SelectedIngredients
         onClear={handleClearSelectedingredients}
-        onSearch={() => {}}
+        onSearch={handleSearch}
         quantity={selectedIngridients.length}
       />
     )}

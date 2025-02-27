@@ -1,6 +1,18 @@
 import { supabase } from "./supabase";
 
 
+async function findByIds(ids: string[]){
+  const { data } = await supabase
+  .from("ingredients")
+  .select()
+  .in("id", ids)
+  .order("name")
+  .overrideTypes<IngredientResponse[]>()
+
+  return data ?? []
+}
+
+
 
 // Get all the ingredients on the database
 async function findAll() {
@@ -14,4 +26,4 @@ async function findAll() {
 }
 
 
-export {findAll}
+export {findAll, findByIds}

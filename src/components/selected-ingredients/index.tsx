@@ -21,7 +21,7 @@ export function SelectedIngredients({quantity, onClear, onSearch} : SelectedIngr
   return (
     <Animated.View style={s.container} entering={SlideInDown.duration(500)} exiting={BounceOutDown}>
       <View style={s.header}>
-        <Text style={s.label}>3 ingredientes selecionados</Text>
+        <Text style={s.label}>{quantity} ingredientes selecionados</Text>
         <MaterialIcons
           name="close"
           size={24}
