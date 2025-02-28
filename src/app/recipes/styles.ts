@@ -16,5 +16,16 @@ export const s = StyleSheet.create({
     fontFamily: theme.fonts.family.bold, 
     fontSize: theme.fonts.size.heading.md, 
     marginTop:22, 
-  }
+  }, 
+  recipes: {
+    padding: 32
+  }, 
+  recipesContent: {
+    gap: 16
+  }, 
+  empty: {
+    fontSize: theme.fonts.size.body.md,
+    fontFamily: theme.fonts.family.regular,
+    color: theme.colors.gray_400,
+  },
 })

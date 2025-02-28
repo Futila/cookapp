@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { services } from "@/services";
 import { Ingredients } from "@/components/ingredients";
 import { FlatList } from "react-native";
+import { Recipe } from "@/components/Recipe";
+import { Loading } from "@/components/Loading";
 
 export default function Recipes() {
   const [isLoading, setIsLoading] = useState(true)
@@ -20,16 +22,16 @@ export default function Recipes() {
   const ingredientsIds = params.ingredientsIds.split(",")
 
   //cheking the income ids
-  console.log(params)
-  console.log(ingredientsIds)
+  // console.log(params)
+  // console.log(ingredientsIds)
 
 
-  // useEffect(() => {
-  //   services.recipes
-  //     .findByIngredientsIds(ingredientsIds)
-  //     .then((response) => setRecipes(response))
-  //     .finally(() => setIsLoading(false))
-  // }, [])
+  useEffect(() => {
+    services.recipes
+      .findByIngredientsIds(ingredientsIds)
+      .then((response) => setRecipes(response))
+      .finally(() => setIsLoading(false))
+  }, [])
 
 
   useEffect(() => {
@@ -38,6 +40,11 @@ export default function Recipes() {
     .then(setIngredients)
     .finally(() => setIsLoading(false))
   }, [])
+
+
+  if(isLoading) {
+    return <Loading/>
+  }
 
   return (
     <View style={s.container}>
@@ -54,12 +61,26 @@ export default function Recipes() {
    {<Ingredients ingredients={ingredients}/>}
 
 
-   {/* <FlatList
+   <FlatList
     data={recipes}
-    keyExtractor={}
-   
-   
-   /> */}
+    keyExtractor={(item) => item.id}
+    renderItem={({item}) => (
+      <Recipe
+        recipe={item}
+        onPress={() => {}}
+      />
+    )}
+   style={s.recipes}
+   contentContainerStyle={s.recipesContent}
+   showsVerticalScrollIndicator={false}
+   numColumns={2}
+   columnWrapperStyle={{gap:16}}
+   ListEmptyComponent={() => (
+    <Text style={s.empty}>
+      Nenhuma receita encontrada. Escolha outros ingredientes.
+    </Text>
+  )}
+   />
   </View>
   )
 }
