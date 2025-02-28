@@ -29,8 +29,6 @@ async function findByRecipeId(id: string) {
 
 }
 
-
-
 // Get all the ingredients on the database
 async function findAll() {
   const { data } = await supabase
