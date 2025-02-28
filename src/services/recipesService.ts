@@ -18,6 +18,8 @@ async function show(id: string) {
     .from("recipes")
     .select()
     .eq("id", id)
+    .returns<RecipeResponse>()
+    .single()
 
   return data
 }

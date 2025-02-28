@@ -11,6 +11,8 @@ type IngredientsProps = {
 
 
 export function Ingredients({ingredients}: IngredientsProps) {
+
+  console.log("CONSOLE LOG FROM INGREDIENT COMPONENT:", ingredients)
   return (
     <ScrollView
       horizontal

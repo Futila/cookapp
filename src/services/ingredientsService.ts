@@ -13,6 +13,23 @@ async function findByIds(ids: string[]){
 }
 
 
+async function findByRecipeId(id: string) {
+  const { data, error } = await supabase
+    .from("recipes_ingredients")
+    .select("ingredients (id, name, image)")
+    .eq("recipe_id", id)
+    .returns<{ ingredients: IngredientResponse }[]>()
+    if (error) {
+      console.error("Erro ao buscar ingredientes:", error)
+      return []
+    }
+  
+    console.log("Dados crus do Supabase:", data)
+    return data ? data.map((item) => item.ingredients) : []
+
+}
+
+
 
 // Get all the ingredients on the database
 async function findAll() {
@@ -26,4 +43,4 @@ async function findAll() {
 }
 
 
-export {findAll, findByIds}
+export {findAll, findByIds,findByRecipeId}
